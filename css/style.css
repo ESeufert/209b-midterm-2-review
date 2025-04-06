@@ -1,0 +1,14 @@
+body {
+  font-family: sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 1rem;
+}
+
+.lecture {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
