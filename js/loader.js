@@ -3,9 +3,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   try {
     const lectureFiles = [
-      "lecture_html/lec_13.html",
-      "lecture_html/lec_14.html",
-      "lecture_html/lec_15.html"
+      "lec_dummy_1.html"
       // add more files here as needed
     ];
 
