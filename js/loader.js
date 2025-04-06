@@ -1,14 +1,15 @@
 window.addEventListener('DOMContentLoaded', async () => {
   const container = document.getElementById('content-container');
+  const BASE_URL = 'https://eseufert.github.io/209b-midterm-2-review/lecture_html/';
 
   try {
     const lectureFiles = [
       "lec_dummy_1.html"
-      // add more files here as needed
+      // add more files here
     ];
 
     lectureFiles.forEach(file => {
-      fetch(`lecture_html/${file}`)
+      fetch(`${BASE_URL}${file}`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`Failed to load ${file}`);
