@@ -7,10 +7,8 @@ window.addEventListener('DOMContentLoaded', async () => {
       // add more files here as needed
     ];
 
-    const container = document.getElementById("content-container");
-
     lectureFiles.forEach(file => {
-      fetch(file)
+      fetch(`lecture_html/${file}`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`Failed to load ${file}`);
