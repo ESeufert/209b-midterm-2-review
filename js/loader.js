@@ -1,42 +1,38 @@
+// loader.js
 
 window.addEventListener('DOMContentLoaded', async () => {
   const container = document.getElementById('content-container');
   const navLinks = document.getElementById('nav-links');
 
-  try {
-    const response = await fetch('lecture_html/');
-    const text = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, 'text/html');
-    const links = Array.from(doc.querySelectorAll('a'));
+  // Manually specify the HTML files to load
+  const lectureFiles = [
+    'LEC_13.html'
+    // Add more HTML filenames here if needed, e.g., 'LEC_14.html', 'LEC_15.html'
+  ];
 
-    const lectureFiles = links
-      .map(link => link.getAttribute('href'))
-      .filter(name => name && name.endsWith('.html'))
-      .sort();
+  lectureFiles.forEach(file => {
+    fetch(`lecture_html/${file}`)
+      .then(response => response.text())
+      .then(html => {
+        const section = document.createElement("section");
+        section.innerHTML = html;
+        section.id = file.replace(".html", "");
+        container.appendChild(section);
 
-    lectureFiles.forEach(file => {
-      fetch(`lecture_html/${file}`)
-        .then(response => response.text())
-        .then(html => {
-          const section = document.createElement("section");
-          section.innerHTML = html;
-          section.id = file.replace(".html", "");
-          container.appendChild(section);
-
-          const listItem = document.createElement("li");
-          const link = document.createElement("a");
-          link.href = `#${section.id}`;
-          link.textContent = file;
-          listItem.appendChild(link);
-          navLinks.appendChild(listItem);
-        });
-    });
-  } catch (err) {
-    console.error("Error loading lecture files dynamically:", err);
-  }
+        const listItem = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = `#${section.id}`;
+        link.textContent = file;
+        listItem.appendChild(link);
+        navLinks.appendChild(listItem);
+      })
+      .catch(err => {
+        console.error(`Failed to load ${file}:`, err);
+      });
+  });
 });
 
+// Handles both single- and multiple-answer questions
 function checkAnswer(questionId, correctValue) {
   const question = document.getElementById(questionId);
   const options = question.querySelectorAll("input");
@@ -44,10 +40,18 @@ function checkAnswer(questionId, correctValue) {
 
   options.forEach(option => {
     const label = option.parentElement;
-    if (option.value === correctValue) {
+    label.classList.remove("correct-style", "incorrect-style");
+
+    const isCorrect = Array.isArray(correctValue)
+      ? correctValue.includes(option.value)
+      : option.value === correctValue;
+
+    if (option.checked && isCorrect) {
       label.classList.add("correct-style");
-    } else if (option.checked) {
+    } else if (option.checked && !isCorrect) {
       label.classList.add("incorrect-style");
+    } else if (!option.checked && isCorrect && option.type === "checkbox") {
+      label.classList.add("correct-style");
     }
   });
 
